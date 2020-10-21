@@ -162,8 +162,16 @@ class SingleLinkList:
         """
         for item in l:
             self.append(item)
+
     def reverse(self):
-        pass
+        """
+        单链表翻转
+        """
+        last = None
+        while self._head:
+            self._head.next, last, self._head = last, self._head, self._head.next
+        self._head= last
+
 
 class DoubleLinkList:
     """
@@ -298,6 +306,10 @@ class DoubleLinkList:
                     break
                 cur = cur.next
 
+    def init(self, l: list):
+        for item in l:
+            self.append(item)
+
     def reverse(self):
         """
         翻转链表
@@ -333,4 +345,18 @@ if __name__ == '__main__':
     s_list.insert(2, 33)
     s_list.remove(4)
     for i in s_list.items():
+        print(i)
+    print("s_list reverse")    
+    s_list.reverse()
+    for i in s_list.items():
+        print(i)
+    print("*"*100)
+    d_list = DoubleLinkList()
+    d_list.append("chen")
+    d_list.init([1, 2, 3, 4, 5, 6])
+    for i in d_list.items():
+        print(i)
+    print("d_list reverse")    
+    d_list.reverse()
+    for i in d_list.items():
         print(i)
