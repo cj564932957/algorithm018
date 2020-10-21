@@ -319,17 +319,21 @@ class DoubleLinkList:
         current = self._head
         # 当链表为非空的时候，需要执行相应反转的操作
         # 分别将相邻的两个节点的前驱后继关系进行反转
+        # while current:
+        #     # 将下一个节点保存在next_node中
+        #     next_node = current.next
+        #     # 由于反转链表，因此头节点反转后，成为尾节点，应该指向None
+        #     current.next = prev
+        #     # 尾节点的前驱应指向原本的后继
+        #     current.prev = next_node
+        #     # 更新prev，向后移动
+        #     prev = current
+        #     # 更新current，向后移动
+        #     current = next_node
         while current:
-            # 将下一个节点保存在next_node中
-            next_node = current.next
-            # 由于反转链表，因此头节点反转后，成为尾节点，应该指向None
-            current.next = prev
-            # 尾节点的前驱应指向原本的后继
-            current.prev = next_node
-            # 更新prev，向后移动
-            prev = current
-            # 更新current，向后移动
-            current = next_node
+            # self._head.next, last, self._head = last, self._head, self._head.next
+            current.next , current.prev,prev,current = prev, current.next,current,current.next
+            
         # 到达链表尾部时，需要特殊处理
         self._head = prev
 
