@@ -111,7 +111,7 @@ class SingleLinkList:
             node = SingleNode(item)
             cur = self._head
             # 循环到需要插入的位置
-            for i in range(index - 1):
+            for _ in range(index - 1):
                 cur = cur.next
             node.next = cur.next
             cur.next = node
