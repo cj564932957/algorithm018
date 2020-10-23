@@ -170,7 +170,7 @@ class SingleLinkList:
         last = None
         while self._head:
             self._head.next, last, self._head = last, self._head, self._head.next
-        self._head= last
+        self._head = last
 
 
 class DoubleLinkList:
@@ -214,7 +214,7 @@ class DoubleLinkList:
         遍历链表
 
         Yields:
-            [Node.item]: 
+            [Node.item]:
         """
         cur = self._head
         while cur is not None:
@@ -332,35 +332,215 @@ class DoubleLinkList:
         #     current = next_node
         while current:
             # self._head.next, last, self._head = last, self._head, self._head.next
-            current.next , current.prev,prev,current = prev, current.next,current,current.next
-            
+            current.next, current.prev, prev, current = prev, current.next, current, current.next
+
         # 到达链表尾部时，需要特殊处理
         self._head = prev
 
 
 class CycleLinkList:
     def __init__(self):
-        pass
+        self._head = None
+
+    def is_empty(self):
+        """
+        判断链表是否为空
+
+        Returns:
+            [bool]: [description]
+        """
+        return self._head is None
+
+    def length(self):
+        """
+        链表长度
+
+        Returns:
+            [type]: [description]
+        """
+        cur = self._head
+        count = 0
+        while cur.next is not self._head:
+            count += 1
+            cur = cur.next
+        return count
+
+    def items(self):
+        """
+        遍历链表
+
+        Yields:
+            [Node.item]: 
+        """
+        if self.is_empty():
+            return
+        cur = self._head
+        while cur.next != self._head:
+            # 退出循环时，cur指向最后一个结点
+            yield cur.item
+            cur = cur.next
+        yield cur.item
 
 
-if __name__ == '__main__':
-    s_list = SingleLinkList()
-    s_list.init([1, 2, 3, 4, 5])
-    s_list.insert(2, 33)
-    s_list.remove(4)
-    for i in s_list.items():
+    def add(self, item):
+        """
+        在头添加数据
+
+        Args:
+            item ([type]): [description]
+        """
+        node = CycleNode(item)
+        if self.is_empty():
+            node.next = node
+            self._head = node
+        else:
+            cur = self._head
+            # 查找尾节点
+            while cur.next != self._head:
+                cur = cur.next
+            # node.next = self._head
+            # self._head = node
+            # cur.next = node
+            node.next, self._head, cur.next = self._head, node, node
+
+    def append(self, item):
+        """
+        尾部追加
+
+        Args:
+            item ([type]): [description]
+        """
+        node = DoubleNode(item)
+        if self.is_empty():
+            node.next = node
+            self._head = node
+        else:
+            # 循环移动到链表尾部结点的位置
+            cur = self._head
+            while cur.next != self._head:
+                cur = cur.next
+            node.next = self._head
+            cur.next = node
+ 
+    def insert(self, pos, item):
+        """
+        指定位置插入数据
+
+        Args:
+            pos ([type]): [description]
+            item ([type]): [description]
+        """
+        if pos <= 0:
+            self.add(item)
+        elif pos > (self.length() - 1):
+            self.append(item)
+        else:
+            pre = self._head
+            count = 0
+            while count < (pos - 1):
+                count += 1
+                pre = pre.next
+            # 退出循环，pre指向插入位置的前一个结点
+            node = CycleNode(item)
+            node.next = pre.next
+            pre.next = node
+
+    def remove(self, item):
+        """
+        删除数据
+
+        Args:
+            item ([type]): [description]
+        """
+        if self.is_empty():
+            return
+        cur = self._head
+        pre = None
+        while cur.next != self._head:
+            if cur.item == item:
+                # 头结点
+                if cur == self._head:
+                    rear = self._head
+                    while rear.next != self._head:
+                        rear = rear.next
+                    rear.next = cur.next
+                    self._head = cur.next
+                else:  # 中间结点
+                    pre.next = cur.next
+                return
+            else:
+                pre = cur
+                cur = cur.next
+        # 退出循环, cur指向尾结点
+        if cur.elem == item:
+            # 链表中只有一个结点
+            if cur == self._head:
+                self._head = None
+            else:
+                pre.next = self._head
+
+    def search(self, item):
+        if self.is_empty():
+            return False
+        cur = self._head
+        while cur.next != self._head:
+            if cur.item == item:
+                return True
+            else:
+                cur = cur.next
+        # 退出循环，cur指向尾结点
+        if cur.item == item:
+            return True
+        return False
+
+    def init(self, l: list):
+        for item in l:
+            self.append(item)
+
+    def reverse(self):
+        cur = self._head
+        while cur.next != self._head:
+            # 退出循环时，cur指向最后一个结点
+            print(cur.item) 
+            cur=cur.next
+            # self._head.next, last, self._head = last, self._head, self._head.next
+        print(cur.item)
+        print(self._head.item)
+
+        
+if __name__ == '__main__': 
+    # s_list = SingleLinkList()
+    # s_list.init([1, 2, 3, 4, 5])
+    # s_list.insert(2, 33)
+    # s_list.remove(4)
+    # for i in s_list.items():
+    #     print(i)
+    # print("s_list reverse")
+    # s_list.reverse()
+    # for i in s_list.items():
+    #     print(i)
+    # print("*"*100)
+    # d_list = DoubleLinkList()
+    # d_list.append("chen")
+    # d_list.init([1, 2, 3, 4, 5, 6])
+    # for i in d_list.items():
+    #     print(i)
+    # print("d_list reverse")
+    # d_list.reverse()
+    # for i in d_list.items():
+    #     print(i)
+    c_list=CycleLinkList()
+    c_list.init([1,2,3,4,5])
+    c_list.add('a')
+    c_list.append('b')
+    # c_list.insert(2,'da')
+    # c_list.remove(4)
+    print(c_list.search(5))
+    for i in c_list.items():
         print(i)
-    print("s_list reverse")    
-    s_list.reverse()
-    for i in s_list.items():
-        print(i)
-    print("*"*100)
-    d_list = DoubleLinkList()
-    d_list.append("chen")
-    d_list.init([1, 2, 3, 4, 5, 6])
-    for i in d_list.items():
-        print(i)
-    print("d_list reverse")    
-    d_list.reverse()
-    for i in d_list.items():
-        print(i)
+    print("reverse")
+    c_list.reverse()
+
+    # for i in c_list.items():
+        # print(i)
+    
